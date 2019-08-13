@@ -1,0 +1,45 @@
+﻿<Window x:Class="DiaryApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DiaryApp"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="6*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <ListView x:Name="lvData" Grid.Column="0" Grid.Row="0" Margin="5">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <TextBlock Text="{Binding Importance}" FontSize="24" Foreground="Red"/>
+                        <TextBlock Text="{Binding Date}" FontSize="14"/>
+                        <TextBlock Text="{Binding Body}" FontSize="14"/>
+                        <TextBlock Text="{Binding Signature}" FontSize="14"/>
+                        <TextBlock Text="{Binding Location}" FontSize="15" Foreground="Blue"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <DataGrid x:Name="dgData" Grid.Column="1" Grid.ColumnSpan="3" PreviewMouseLeftButtonUp="DgData_PreviewMouseLeftButtonUp"/>
+        <Label Grid.Row="1" Grid.Column="3" VerticalAlignment="Top" Content="Поиск:"/>
+        <TextBox  Grid.Row="1" Grid.Column="3" Margin="5" TextChanged="TextBox_TextChanged" TextAlignment="Center" Height="24" VerticalAlignment="Bottom"/>
+        <Button x:Name="btnAddString" Content="Создать запись" Grid.Column="0" Grid.Row="1" Margin="5" Click="BtnAddString_Click"/>
+        <Button x:Name="btnEditString" Content="Редактировать запись" Grid.Column="1" Grid.Row="1" Margin="5" Click="BtnEditString_Click"/>
+        <Button x:Name="btnDeleteString" Content="Удалить запись" Grid.Column="2" Grid.Row="1" Margin="5" Click="BtnDeleteString_Click"/>
+        <Button x:Name="btnLoadFromFile" Content="Загрузить из файла" Grid.Column="0" Grid.Row="2" Margin="5"/>
+        <Button x:Name="btnAddFromFile" Content="Добавить из файла" Grid.Column="1" Grid.Row="2" Margin="5"/>
+        <Button x:Name="btnExportToFile" Content="Выгрузить в файл" Grid.Column="2" Grid.Row="2" Margin="5"/>
+        <Button x:Name="btnImportByDateRange" Content="Импорт по диапазону дат" Grid.Column="3" Grid.Row="2" Margin="5"/>
+    </Grid>
+</Window>
