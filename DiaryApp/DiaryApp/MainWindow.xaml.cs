@@ -82,6 +82,7 @@ namespace DiaryApp
                                                 || c.Importance.ToLower().Contains(tbSearch.Text.ToLower()) || c.Signature.ToLower().Contains(tbSearch.Text.ToLower()) ||
                                                 c.Location.ToLower().Contains(tbSearch.Text.ToLower())).ToList();
             lvData.ItemsSource = filteredList;
+            dgData.ItemsSource = filteredList;
         }
         /// <summary>
         /// Кнопка для удаления выделенной записи из БД
@@ -232,12 +233,16 @@ namespace DiaryApp
                 MessageBox.Show("Ошибка при импорте из файла. Проверьте формат данных в файле. " + ex);
             }
 
+            using (SQLiteConnection connection = new SQLiteConnection(App.dataBasePath))
+            {
+                connection.DeleteAll<DataGridInfo>();
+            }
+
             foreach (DataGridInfo item in fromFile)
             {
                 using (SQLiteConnection connection = new SQLiteConnection(App.dataBasePath))
                 {
                     connection.CreateTable<DataGridInfo>();
-                    connection.DeleteAll<DataGridInfo>();
                     connection.Insert(item);
                 }
             }
