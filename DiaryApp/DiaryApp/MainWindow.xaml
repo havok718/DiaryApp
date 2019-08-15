@@ -37,9 +37,9 @@
         <Button x:Name="btnAddString" Content="Создать запись" Grid.Column="0" Grid.Row="1" Margin="5" Click="BtnAddString_Click"/>
         <Button x:Name="btnEditString" Content="Редактировать запись" Grid.Column="1" Grid.Row="1" Margin="5" Click="BtnEditString_Click"/>
         <Button x:Name="btnDeleteString" Content="Удалить запись" Grid.Column="2" Grid.Row="1" Margin="5" Click="BtnDeleteString_Click"/>
-        <Button x:Name="btnLoadFromFile" Content="Загрузить из файла" Grid.Column="0" Grid.Row="2" Margin="5"/>
-        <Button x:Name="btnAddFromFile" Content="Добавить из файла" Grid.Column="1" Grid.Row="2" Margin="5"/>
-        <Button x:Name="btnExportToFile" Content="Выгрузить в файл" Grid.Column="2" Grid.Row="2" Margin="5"/>
-        <Button x:Name="btnImportByDateRange" Content="Импорт по диапазону дат" Grid.Column="3" Grid.Row="2" Margin="5"/>
+        <Button x:Name="btnLoadFromFile" Content="Загрузить из файла" Grid.Column="0" Grid.Row="2" Margin="5" Click="BtnLoadFromFile_Click"/>
+        <Button x:Name="btnAddFromFile" Content="Добавить из файла" Grid.Column="1" Grid.Row="2" Margin="5" Click="BtnAddFromFile_Click"/>
+        <Button x:Name="btnExportToFile" Content="Выгрузить в файл" Grid.Column="2" Grid.Row="2" Margin="5" Click="BtnExportToFile_Click"/>
+        <Button x:Name="btnImportByDateRange" Content="Импорт по диапазону дат" Grid.Column="3" Grid.Row="2" Margin="5" Click="BtnImportByDateRange_Click"/>
     </Grid>
 </Window>

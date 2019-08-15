@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,9 +33,6 @@ using System.Windows.Shapes;
 /// - Упорядочивания записей ежедневника по выбранному полю
 namespace DiaryApp
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         List<DataGridInfo> dataInfo;
@@ -44,13 +42,20 @@ namespace DiaryApp
             dataInfo = new List<DataGridInfo>();
             ReadDataBase();
         }
-
+        /// <summary>
+        /// Кнопка, открывающая окно добавления новой записи
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnAddString_Click(object sender, RoutedEventArgs e)
         {
             AddNewNoteWindow addNewNoteWindow = new AddNewNoteWindow();
             addNewNoteWindow.ShowDialog();
             ReadDataBase();
         }
+        /// <summary>
+        /// Метод для обновления значений из БД
+        /// </summary>
         void ReadDataBase()
         {
             using (SQLiteConnection conn = new SQLiteConnection(App.dataBasePath))
@@ -65,7 +70,11 @@ namespace DiaryApp
                 dgData.ItemsSource = dataInfo;
             }
         }
-
+        /// <summary>
+        /// Метод для выполнения поиска записи по любому значению
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             TextBox tbSearch = sender as TextBox;
@@ -74,7 +83,11 @@ namespace DiaryApp
                                                 c.Location.ToLower().Contains(tbSearch.Text.ToLower())).ToList();
             lvData.ItemsSource = filteredList;
         }
-
+        /// <summary>
+        /// Кнопка для удаления выделенной записи из БД
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnDeleteString_Click(object sender, RoutedEventArgs e)
         {
             DataGridInfo selectedNote = (DataGridInfo)lvData.SelectedItem;
@@ -88,19 +101,33 @@ namespace DiaryApp
                 ReadDataBase();
             }
         }
-
+        /// <summary>
+        /// Кнопка, которая открывает окно редактирования выделенной записи
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnEditString_Click(object sender, RoutedEventArgs e)
         {
-            DataGridInfo selectedNote = (DataGridInfo)lvData.SelectedItem;
-
-            if (selectedNote != null)
+            try
             {
-                UpdateDeleteNoteWindow updateDeleteNoteWindow = new UpdateDeleteNoteWindow(selectedNote);
-                updateDeleteNoteWindow.ShowDialog();
-                ReadDataBase();
+                DataGridInfo selectedNote = (DataGridInfo)lvData.SelectedItem;
+                if (selectedNote != null)
+                {
+                    UpdateDeleteNoteWindow updateDeleteNoteWindow = new UpdateDeleteNoteWindow(selectedNote);
+                    updateDeleteNoteWindow.ShowDialog();
+                    ReadDataBase();
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("Выберите значение! " + ex);
             }
         }
-
+        /// <summary>
+        /// Логика, позволяющая при выделении элемента в DataGrid выделить тот же самый элемент в ListView
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DgData_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             var item = (sender as DataGrid).SelectedItem;
@@ -109,22 +136,123 @@ namespace DiaryApp
                 lvData.SelectedItem = item;
             }
         }
-        public DataTable ConvertToDataTable<T>(List<T> data)
+        /// <summary>
+        /// Кнопка, выполняющая экспорт данных в текстовый файл SaveFile.txt. Файл будет находится в папке "Мои документы"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnExportToFile_Click(object sender, RoutedEventArgs e)
         {
-            PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(T));
-            DataTable table = new DataTable();
-            foreach (PropertyDescriptor prop in properties)
+            try
             {
-                table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
+                using (TextWriter tw = new StreamWriter(App.fileSaveLocation))
+                {
+                    foreach (var s in dataInfo)
+                    {
+                        tw.WriteLine(s);
+                    }
+                }
+                MessageBox.Show("Файл экспортирован успешно.");
             }
-            foreach (T item in data)
+            catch(Exception ex)
             {
-                DataRow row = table.NewRow();
-                foreach (PropertyDescriptor prop in properties)
-                    row[prop.Name] = prop.GetValue(item) ?? DBNull.Value;
-                table.Rows.Add(row);
+                MessageBox.Show("Во время экспорта произошла ошибка " + ex);
             }
-            return table;
+        }
+        /// <summary>
+        /// Кнопка, добавляющая в БД элементы из ранее сохраненного файла
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnAddFromFile_Click(object sender, RoutedEventArgs e)
+        {
+            //// TODO добавить возможность выбора файла на диске
+            var fileLines = File.ReadAllLines(App.fileSaveLocation).ToList();
+            List<DataGridInfo> fromFile = new List<DataGridInfo>();
+            try
+            {
+                foreach (string line in fileLines)
+                {
+                    string[] s = line.Split('Ω');
+                    if (s != null)
+                    {
+                        DataGridInfo import = new DataGridInfo();
+                        import.Importance = s[0].Trim();
+                        import.Date = s[1].Trim();
+                        import.Body = s[2].Trim();
+                        import.Signature = s[3].Trim();
+                        import.Location = s[4].Trim();
+                        fromFile.Add(import);
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("Ошибка при импорте из файла. Проверьте формат данных в файле. " + ex);
+            }
+
+            foreach (DataGridInfo item in fromFile)
+            {
+                using (SQLiteConnection connection = new SQLiteConnection(App.dataBasePath))
+                {
+                    connection.CreateTable<DataGridInfo>();
+                    connection.Insert(item);
+                }
+            }
+            ReadDataBase();
+        }
+        /// <summary>
+        /// Кнопка, которая загружает данные из файла, при этом удаляет старые данные из БД
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnLoadFromFile_Click(object sender, RoutedEventArgs e)
+        {
+            var fileLines = File.ReadAllLines(App.fileSaveLocation).ToList();
+            List<DataGridInfo> fromFile = new List<DataGridInfo>();
+            try
+            {
+                foreach (string line in fileLines)
+                {
+                    string[] s = line.Split('Ω');
+                    if (s != null)
+                    {
+                        DataGridInfo import = new DataGridInfo();
+                        import.Importance = s[0].Trim();
+                        import.Date = s[1].Trim();
+                        import.Body = s[2].Trim();
+                        import.Signature = s[3].Trim();
+                        import.Location = s[4].Trim();
+                        fromFile.Add(import);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ошибка при импорте из файла. Проверьте формат данных в файле. " + ex);
+            }
+
+            foreach (DataGridInfo item in fromFile)
+            {
+                using (SQLiteConnection connection = new SQLiteConnection(App.dataBasePath))
+                {
+                    connection.CreateTable<DataGridInfo>();
+                    connection.DeleteAll<DataGridInfo>();
+                    connection.Insert(item);
+                }
+            }
+            ReadDataBase();
+        }
+        /// <summary>
+        /// Кнопка открывает окно для добавления записей по диапазону дат
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnImportByDateRange_Click(object sender, RoutedEventArgs e)
+        {
+            ImportByDateRange importByDateRange = new ImportByDateRange();
+            importByDateRange.ShowDialog();
+            ReadDataBase();
         }
     }
 }

@@ -27,3 +27,14 @@ C:\Users\havok\source\repos\Homework_Theme_06\DiaryApp\DiaryApp\obj\Debug\DiaryA
 C:\Users\havok\source\repos\Homework_Theme_06\DiaryApp\DiaryApp\obj\Debug\DiaryApp.csprojAssemblyReference.cache
 C:\Users\havok\source\repos\Homework_Theme_06\DiaryApp\DiaryApp\obj\Debug\UpdateDeleteNoteWindow.g.cs
 C:\Users\havok\source\repos\Homework_Theme_06\DiaryApp\DiaryApp\obj\Debug\UpdateDeleteNoteWindow.baml
+C:\Users\havok\source\repos\Homework_Theme_06\DiaryApp\DiaryApp\bin\Debug\EntityFramework.dll
+C:\Users\havok\source\repos\Homework_Theme_06\DiaryApp\DiaryApp\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\havok\source\repos\Homework_Theme_06\DiaryApp\DiaryApp\bin\Debug\System.Data.SQLite.dll
+C:\Users\havok\source\repos\Homework_Theme_06\DiaryApp\DiaryApp\bin\Debug\System.Data.SQLite.EF6.dll
+C:\Users\havok\source\repos\Homework_Theme_06\DiaryApp\DiaryApp\bin\Debug\System.Data.SQLite.Linq.dll
+C:\Users\havok\source\repos\Homework_Theme_06\DiaryApp\DiaryApp\bin\Debug\EntityFramework.xml
+C:\Users\havok\source\repos\Homework_Theme_06\DiaryApp\DiaryApp\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\havok\source\repos\Homework_Theme_06\DiaryApp\DiaryApp\bin\Debug\System.Data.SQLite.xml
+C:\Users\havok\source\repos\Homework_Theme_06\DiaryApp\DiaryApp\bin\Debug\System.Data.SQLite.dll.config
+C:\Users\havok\source\repos\Homework_Theme_06\DiaryApp\DiaryApp\obj\Debug\ImportByDateRange.g.cs
+C:\Users\havok\source\repos\Homework_Theme_06\DiaryApp\DiaryApp\obj\Debug\ImportByDateRange.baml

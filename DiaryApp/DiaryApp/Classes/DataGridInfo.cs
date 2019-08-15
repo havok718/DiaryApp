@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace DiaryApp
 {
+    /// <summary>
+    /// Класс, который содержит в себе поля записи ежедневника
+    /// </summary>
     public class DataGridInfo
     {
         [PrimaryKey, AutoIncrement]
@@ -18,7 +21,7 @@ namespace DiaryApp
         public string Signature { get; set; }
         public override string ToString()
         {
-            return $"{Importance} - {Date} - {Body} - {Signature} - {Location}";
+            return $"{Importance}Ω{Date}Ω{Body}Ω{Signature}Ω{Location}";
         }
     }
     

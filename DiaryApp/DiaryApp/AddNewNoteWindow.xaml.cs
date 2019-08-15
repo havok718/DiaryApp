@@ -24,26 +24,27 @@ namespace DiaryApp
         {
             InitializeComponent();
         }
-
+        /// <summary>
+        /// Кнопка для сохранения введенных данных в БД
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnSave_Click(object sender, RoutedEventArgs e)
         {
             DataGridInfo dataGridInfo = new DataGridInfo()
             {
                 Importance = tbImportance.Text,
-                Date = dpDate.Text.ToString(),
+                Date = dpDate.Text,
                 Body = tbBody.Text,
                 Signature = tbSignature.Text,
                 Location = tbLocation.Text
             };
-
-            
 
             using (SQLiteConnection connection = new SQLiteConnection(App.dataBasePath))
             {
                 connection.CreateTable<DataGridInfo>();
                 connection.Insert(dataGridInfo);
             }
-                
 
             Close();
         }

@@ -21,6 +21,10 @@ namespace DiaryApp
     public partial class UpdateDeleteNoteWindow : Window
     {
         DataGridInfo dataGridInfo;
+        /// <summary>
+        /// Конструктор, который при вызове окна редактирования заполняет поля данными из записи, которую ранее выбрал пользователь
+        /// </summary>
+        /// <param name="dataGridInfo"></param>
         public UpdateDeleteNoteWindow(DataGridInfo dataGridInfo)
         {
             InitializeComponent();
@@ -31,7 +35,11 @@ namespace DiaryApp
             tbBody.Text = dataGridInfo.Body;
             dpDate.Text = dataGridInfo.Date;
         }
-
+        /// <summary>
+        /// Кнопка для сохранения изменений в записи
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnSave_Click(object sender, RoutedEventArgs e)
         {
             dataGridInfo.Importance = tbImportance.Text;
@@ -50,7 +58,11 @@ namespace DiaryApp
             }
             Close();
         }
-
+        /// <summary>
+        /// Кнопка для удаления записи
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnDelete_Click(object sender, RoutedEventArgs e)
         {
             if (dataGridInfo != null)
